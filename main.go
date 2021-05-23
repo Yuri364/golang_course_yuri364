@@ -13,7 +13,7 @@ func main() {
 		fmt.Scan(&num)
 
 		if num > 0 {
-			nums = InsertV2(nums, num)
+			nums = Insert(nums, num)
 		} else {
 			nums = Delete(nums, -num)
 		}

@@ -58,3 +58,21 @@ func TestDelete(t *testing.T) {
 	}
 
 }
+
+func BenchmarkInsert(b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        Insert([]int{12,32,12},3)
+    }
+}
+
+func BenchmarkInsert2(b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        Insert([]int{123,32,12},33)
+    }
+}
+
+func BenchmarkDelete(b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        Delete([]int{123,23,432,3212,1,43}, 23)
+    }
+}
