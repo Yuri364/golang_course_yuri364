@@ -73,3 +73,59 @@ func TestDelete(t *testing.T) {
         }
     }
 }
+
+func BenchmarkSortedSlice_Insert(b *testing.B) { benchmarkSortedSliceInsert(b, 10, 9) }
+func BenchmarkSortedSlice_Insert2(b *testing.B) { benchmarkSortedSliceInsert(b, 100, 99) }
+func BenchmarkSortedSlice_Insert3(b *testing.B) { benchmarkSortedSliceInsert(b, 1000, 999) }
+func BenchmarkSortedSlice_Insert4(b *testing.B) { benchmarkSortedSliceInsert(b, 10000, 9999) }
+func BenchmarkSortedSlice_Insert5(b *testing.B) { benchmarkSortedSliceInsert(b, 100000, 99999) }
+
+func BenchmarkSortedSlice_InsertV2(b *testing.B) { benchmarkSortedSliceInsertV2(b, 10, 9) }
+func BenchmarkSortedSlice_InsertV2_2(b *testing.B) { benchmarkSortedSliceInsertV2(b, 100, 99) }
+func BenchmarkSortedSlice_InsertV2_3(b *testing.B) { benchmarkSortedSliceInsertV2(b, 1000, 999) }
+func BenchmarkSortedSlice_InsertV2_4(b *testing.B) { benchmarkSortedSliceInsertV2(b, 10000, 9999) }
+func BenchmarkSortedSlice_InsertV2_5(b *testing.B) { benchmarkSortedSliceInsertV2(b, 100000, 99999) }
+
+func BenchmarkSortedSlice_Delete(b *testing.B) { benchmarkSortedSliceDelete(b, 10, 9) }
+func BenchmarkSortedSlice_Delete2(b *testing.B) { benchmarkSortedSliceDelete(b, 100, 99) }
+func BenchmarkSortedSlice_Delete3(b *testing.B) { benchmarkSortedSliceDelete(b, 1000, 999) }
+func BenchmarkSortedSlice_Delete4(b *testing.B) { benchmarkSortedSliceDelete(b, 10000, 9999) }
+func BenchmarkSortedSlice_Delete5(b *testing.B) { benchmarkSortedSliceDelete(b, 100000, 99999) }
+
+
+func benchmarkSortedSliceInsert(b *testing.B, capacity int, num int) {
+    testSlice := getTestSlice(capacity)
+    for i := 0; i < b.N; i++ {
+        s := SortedSlice{nums: testSlice}
+
+        s.Insert(num)
+    }
+}
+
+func benchmarkSortedSliceInsertV2(b *testing.B, capacity int, num int) {
+    testSlice := getTestSlice(capacity)
+    for i := 0; i < b.N; i++ {
+        s := SortedSlice{nums: testSlice}
+
+        s.InsertV2(num)
+    }
+}
+
+func benchmarkSortedSliceDelete(b *testing.B, capacity int, num int) {
+    testSlice := getTestSlice(capacity)
+    for i := 0; i < b.N; i++ {
+        s := SortedSlice{nums: testSlice}
+
+        s.Delete(num)
+    }
+}
+
+func getTestSlice(capacity int) []int {
+    slice := make([]int, 0, capacity)
+
+    for i := 0; i < capacity; i++ {
+        slice = append(slice, i)
+    }
+
+    return slice
+}

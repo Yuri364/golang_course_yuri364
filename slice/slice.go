@@ -16,6 +16,7 @@ func (s *SortedSlice) Insert(num int)  {
     s.nums = append(s.nums, num)
 }
 
+/** Insert without pointer */
 func (s SortedSlice) InsertV2(num int) []int  {
     for i, v := range s.nums {
         if num < v {
