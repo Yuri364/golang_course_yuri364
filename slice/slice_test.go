@@ -38,15 +38,16 @@ func TestInsertV2(t *testing.T) {
         {[]int{1,3}, 2, []int{1,2,3}},
         {[]int{1,3,12}, 6, []int{1,3,6,12}},
         {[]int{5,6,10}, 11, []int{5,6,10,11}},
+        {[]int{512,632}, 111, []int{111,512,632}},
     }
 
     for _, item := range testData {
         s := SortedSlice{item.nums}
 
-        r := s.InsertV2(item.num)
+        s.InsertV2(item.num)
 
-        if ! reflect.DeepEqual(r, item.expected) {
-            t.Fatalf("Failed to confirm that the slices are equal (Expected: %v, Result: %v)", item.expected, r)
+        if ! reflect.DeepEqual(s.nums, item.expected) {
+            t.Fatalf("Failed to confirm that the slices are equal (Expected: %v, Result: %v)", item.expected, s.nums)
         }
     }
 }
@@ -95,6 +96,8 @@ func BenchmarkSortedSlice_Delete5(b *testing.B) { benchmarkSortedSliceDelete(b, 
 
 func benchmarkSortedSliceInsert(b *testing.B, capacity int, num int) {
     testSlice := getTestSlice(capacity)
+
+    b.ResetTimer()
     for i := 0; i < b.N; i++ {
         s := SortedSlice{nums: testSlice}
 
@@ -104,6 +107,8 @@ func benchmarkSortedSliceInsert(b *testing.B, capacity int, num int) {
 
 func benchmarkSortedSliceInsertV2(b *testing.B, capacity int, num int) {
     testSlice := getTestSlice(capacity)
+
+    b.ResetTimer()
     for i := 0; i < b.N; i++ {
         s := SortedSlice{nums: testSlice}
 
@@ -113,6 +118,8 @@ func benchmarkSortedSliceInsertV2(b *testing.B, capacity int, num int) {
 
 func benchmarkSortedSliceDelete(b *testing.B, capacity int, num int) {
     testSlice := getTestSlice(capacity)
+
+    b.ResetTimer()
     for i := 0; i < b.N; i++ {
         s := SortedSlice{nums: testSlice}
 

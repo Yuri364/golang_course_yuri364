@@ -4,6 +4,7 @@ type SortedSlice struct {
     nums []int
 }
 
+// Copy
 func (s *SortedSlice) Insert(num int)  {
     for i, v := range s.nums {
         if num < v {
@@ -16,15 +17,17 @@ func (s *SortedSlice) Insert(num int)  {
     s.nums = append(s.nums, num)
 }
 
-/** Insert without pointer */
-func (s SortedSlice) InsertV2(num int) []int  {
+// Append
+func (s *SortedSlice) InsertV2(num int) {
     for i, v := range s.nums {
         if num < v {
-            return append(s.nums[:i], append([]int{num}, s.nums[i:]...)...)
+            s.nums = append(s.nums[:i], append([]int{num}, s.nums[i:]...)...)
+
+            return
         }
     }
 
-    return append(s.nums, num)
+    s.nums = append(s.nums, num)
 }
 
 func (s *SortedSlice) Delete(num int) {
