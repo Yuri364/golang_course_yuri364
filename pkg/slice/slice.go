@@ -4,7 +4,7 @@ type SortedSlice struct {
     nums []int
 }
 
-// Copy
+// Insert copy
 func (s *SortedSlice) Insert(num int)  {
     for i, v := range s.nums {
         if num < v {
@@ -17,7 +17,7 @@ func (s *SortedSlice) Insert(num int)  {
     s.nums = append(s.nums, num)
 }
 
-// Append
+// InsertV2 append
 func (s *SortedSlice) InsertV2(num int) {
     for i, v := range s.nums {
         if num < v {
@@ -28,6 +28,29 @@ func (s *SortedSlice) InsertV2(num int) {
     }
 
     s.nums = append(s.nums, num)
+}
+
+
+func (s *SortedSlice) getMax() int {
+    max := s.nums[0]
+    for _, v := range s.nums {
+        if v > max {
+            max = v
+        }
+    }
+
+    return max
+}
+
+func (s *SortedSlice) getMin() int {
+    min := s.nums[0]
+    for _, v := range s.nums {
+        if v < min {
+            min = v
+        }
+    }
+
+    return min
 }
 
 func (s *SortedSlice) Delete(num int) {

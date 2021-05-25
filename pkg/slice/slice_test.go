@@ -47,7 +47,7 @@ func TestInsertV2(t *testing.T) {
         s.InsertV2(item.num)
 
         if ! reflect.DeepEqual(s.nums, item.expected) {
-            t.Fatalf("Failed to confirm that the slices are equal (Expected: %v, Result: %v)", item.expected, s.nums)
+            t.Fatalf("Failed to confirm that the slices are equal (Expected: %v, Actual: %v)", item.expected, s.nums)
         }
     }
 }
@@ -70,11 +70,52 @@ func TestDelete(t *testing.T) {
         s.Delete(item.num)
 
         if ! reflect.DeepEqual(s.nums, item.expected) {
-            t.Fatalf("Failed to confirm that the slices are equal (Expected: %v, Result: %v)", item.expected, s.nums)
+            t.Fatalf("Failed to confirm that the slices are equal (Expected: %v, Actual: %v)", item.expected, s.nums)
         }
     }
 }
 
+func TestGetMax(t *testing.T) {
+    var testData = []struct {
+        nums     []int
+        expected int
+    } {
+        {[]int{3,32,10,35,54,76}, 76},
+        {[]int{343,232,410,776,535,654}, 776},
+        {[]int{3443,7576,2632,4710,5535,6754}, 7576},
+    }
+
+    for _, item := range testData {
+        s := SortedSlice{item.nums}
+        r := s.getMax()
+
+        if ! reflect.DeepEqual(r, item.expected) {
+            t.Fatalf("Failed getMax test (Expected: %v, Actual: %v)", item.expected, r)
+        }
+    }
+}
+
+func TestGetMin(t *testing.T) {
+    var testData = []struct {
+        nums     []int
+        expected int
+    } {
+        {[]int{3,32,10,35,54,76}, 3},
+        {[]int{343,232,410,776,535,654}, 232},
+        {[]int{3443,7576,2632,4710,5535,6754}, 2632},
+    }
+
+    for _, item := range testData {
+        s := SortedSlice{item.nums}
+        r := s.getMin()
+
+        if ! reflect.DeepEqual(r, item.expected) {
+            t.Fatalf("Failed getMin test (Expected: %v, Actual: %v)", item.expected, r)
+        }
+    }
+}
+
+// Benchmarks
 func BenchmarkSortedSlice_Insert(b *testing.B) { benchmarkSortedSliceInsert(b, 10, 9) }
 func BenchmarkSortedSlice_Insert2(b *testing.B) { benchmarkSortedSliceInsert(b, 100, 99) }
 func BenchmarkSortedSlice_Insert3(b *testing.B) { benchmarkSortedSliceInsert(b, 1000, 999) }
