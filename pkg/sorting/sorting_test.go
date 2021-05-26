@@ -1,7 +1,6 @@
 package sorting
 
 import (
-	"fmt"
 	"math/rand"
 	"reflect"
 	"testing"
@@ -73,8 +72,6 @@ func TestInsertionSort(t *testing.T) {
 
 		sliceEqual(s, item.expected, t)
 	}
-
-	fmt.Println(getTestSlice(10))
 }
 
 // Benchmarks
