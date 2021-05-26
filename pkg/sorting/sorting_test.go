@@ -1,6 +1,8 @@
 package sorting
 
 import (
+	"fmt"
+	"math/rand"
 	"reflect"
 	"testing"
 )
@@ -71,7 +73,71 @@ func TestInsertionSort(t *testing.T) {
 
 		sliceEqual(s, item.expected, t)
 	}
+
+	fmt.Println(getTestSlice(10))
 }
+
+// Benchmarks
+func BenchmarkSortedSlice_BubbleSort_hundreds(b *testing.B) { benchmarkBubbleSort(b, 999) }
+func BenchmarkSortedSlice_BubbleSort_thousand(b *testing.B) { benchmarkBubbleSort(b, 9999) }
+
+func BenchmarkSortedSlice_InsertionSort_hundreds(b *testing.B) { benchmarkInsertionSort(b, 999) }
+func BenchmarkSortedSlice_InsertionSort_thousand(b *testing.B) { benchmarkInsertionSort(b, 9999) }
+
+func BenchmarkSortedSlice_QuickSort_hundreds(b *testing.B) { benchmarkQuickSort(b, 1000) }
+func BenchmarkSortedSlice_QuickSort_thousand(b *testing.B) { benchmarkQuickSort(b, 9999) }
+
+func BenchmarkSortedSlice_SelectSort_hundreds(b *testing.B) { benchmarkSelectSort(b, 999) }
+func BenchmarkSortedSlice_SelectSort_thousand(b *testing.B) { benchmarkSelectSort(b, 9999) }
+
+func benchmarkBubbleSort(b *testing.B, size int) {
+	testSlice := getTestSlice(size)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		BubbleSort(testSlice)
+	}
+}
+
+func benchmarkInsertionSort(b *testing.B, size int) {
+	testSlice := getTestSlice(size)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		InsertionSort(testSlice)
+	}
+}
+
+func benchmarkQuickSort(b *testing.B, size int) {
+	testSlice := getTestSlice(size)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		QuickSort(testSlice)
+	}
+}
+
+func benchmarkSelectSort(b *testing.B, size int) {
+	testSlice := getTestSlice(size)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		SelectSort(testSlice)
+	}
+}
+
+func getTestSlice(size int) []int {
+	slice := make([]int, 0, size)
+
+	for i := 0; i < size; i++ {
+		slice = append(slice, i)
+	}
+
+	rand.Shuffle(len(slice), func(i, j int) { slice[i], slice[j] = slice[j], slice[i] })
+
+	return slice
+}
+
 
 func sliceEqual(actual []int, expected []int, t *testing.T)  {
 	if ! reflect.DeepEqual(actual, expected) {

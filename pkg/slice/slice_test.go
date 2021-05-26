@@ -116,27 +116,28 @@ func TestGetMin(t *testing.T) {
 }
 
 // Benchmarks
-func BenchmarkSortedSlice_Insert(b *testing.B) { benchmarkSortedSliceInsert(b, 10, 9) }
-func BenchmarkSortedSlice_Insert2(b *testing.B) { benchmarkSortedSliceInsert(b, 100, 99) }
-func BenchmarkSortedSlice_Insert3(b *testing.B) { benchmarkSortedSliceInsert(b, 1000, 999) }
-func BenchmarkSortedSlice_Insert4(b *testing.B) { benchmarkSortedSliceInsert(b, 10000, 9999) }
-func BenchmarkSortedSlice_Insert5(b *testing.B) { benchmarkSortedSliceInsert(b, 100000, 99999) }
+func BenchmarkSortedSlice_Insert_copy_hundreds(b *testing.B) { benchmarkSortedSliceInsert(b, 999, 99) }
+func BenchmarkSortedSlice_Insert_copy_thousand(b *testing.B) { benchmarkSortedSliceInsert(b, 9999, 999) }
+func BenchmarkSortedSlice_Insert_copy_hundreds_of_thousands(b *testing.B) { benchmarkSortedSliceInsert(b, 999999, 99999) }
 
-func BenchmarkSortedSlice_InsertV2(b *testing.B) { benchmarkSortedSliceInsertV2(b, 10, 9) }
-func BenchmarkSortedSlice_InsertV2_2(b *testing.B) { benchmarkSortedSliceInsertV2(b, 100, 99) }
-func BenchmarkSortedSlice_InsertV2_3(b *testing.B) { benchmarkSortedSliceInsertV2(b, 1000, 999) }
-func BenchmarkSortedSlice_InsertV2_4(b *testing.B) { benchmarkSortedSliceInsertV2(b, 10000, 9999) }
-func BenchmarkSortedSlice_InsertV2_5(b *testing.B) { benchmarkSortedSliceInsertV2(b, 100000, 99999) }
+func BenchmarkSortedSlice_Insert_append_hundreds(b *testing.B) { benchmarkSortedSliceInsertV2(b, 999, 99) }
+func BenchmarkSortedSlice_Insert_append_thousand(b *testing.B) { benchmarkSortedSliceInsertV2(b, 9999, 999) }
+func BenchmarkSortedSlice_Insert_append_hundreds_of_thousands(b *testing.B) { benchmarkSortedSliceInsertV2(b, 999999, 99999) }
 
-func BenchmarkSortedSlice_Delete(b *testing.B) { benchmarkSortedSliceDelete(b, 10, 9) }
-func BenchmarkSortedSlice_Delete2(b *testing.B) { benchmarkSortedSliceDelete(b, 100, 99) }
-func BenchmarkSortedSlice_Delete3(b *testing.B) { benchmarkSortedSliceDelete(b, 1000, 999) }
-func BenchmarkSortedSlice_Delete4(b *testing.B) { benchmarkSortedSliceDelete(b, 10000, 9999) }
-func BenchmarkSortedSlice_Delete5(b *testing.B) { benchmarkSortedSliceDelete(b, 100000, 99999) }
+func BenchmarkSortedSlice_Delete_hundreds(b *testing.B) { benchmarkSortedSliceDelete(b, 999, 99) }
+func BenchmarkSortedSlice_Delete_thousand(b *testing.B) { benchmarkSortedSliceDelete(b, 9999, 999) }
+func BenchmarkSortedSlice_Delete_hundreds_of_thousands(b *testing.B) { benchmarkSortedSliceDelete(b, 999999, 99999) }
 
+func BenchmarkSortedSlice_getMax_hundreds(b *testing.B) { benchmarkSortedSliceGetMax(b, 999) }
+func BenchmarkSortedSlice_getMax_thousand(b *testing.B) { benchmarkSortedSliceGetMax(b, 9999) }
+func BenchmarkSortedSlice_getMax_hundreds_of_thousands(b *testing.B) { benchmarkSortedSliceGetMax(b, 999999) }
 
-func benchmarkSortedSliceInsert(b *testing.B, capacity int, num int) {
-    testSlice := getTestSlice(capacity)
+func BenchmarkSortedSlice_getMin_hundreds(b *testing.B) { benchmarkSortedSliceGetMin(b, 999) }
+func BenchmarkSortedSlice_getMin_thousand(b *testing.B) { benchmarkSortedSliceGetMin(b, 9999) }
+func BenchmarkSortedSlice_getMin_hundreds_of_thousands(b *testing.B) { benchmarkSortedSliceGetMin(b, 999999) }
+
+func benchmarkSortedSliceInsert(b *testing.B, size int, num int) {
+    testSlice := getTestSlice(size)
 
     b.ResetTimer()
     for i := 0; i < b.N; i++ {
@@ -146,8 +147,8 @@ func benchmarkSortedSliceInsert(b *testing.B, capacity int, num int) {
     }
 }
 
-func benchmarkSortedSliceInsertV2(b *testing.B, capacity int, num int) {
-    testSlice := getTestSlice(capacity)
+func benchmarkSortedSliceInsertV2(b *testing.B, size int, num int) {
+    testSlice := getTestSlice(size)
 
     b.ResetTimer()
     for i := 0; i < b.N; i++ {
@@ -157,8 +158,8 @@ func benchmarkSortedSliceInsertV2(b *testing.B, capacity int, num int) {
     }
 }
 
-func benchmarkSortedSliceDelete(b *testing.B, capacity int, num int) {
-    testSlice := getTestSlice(capacity)
+func benchmarkSortedSliceDelete(b *testing.B, size int, num int) {
+    testSlice := getTestSlice(size)
 
     b.ResetTimer()
     for i := 0; i < b.N; i++ {
@@ -168,10 +169,33 @@ func benchmarkSortedSliceDelete(b *testing.B, capacity int, num int) {
     }
 }
 
-func getTestSlice(capacity int) []int {
-    slice := make([]int, 0, capacity)
+func benchmarkSortedSliceGetMax(b *testing.B, size int) {
+    testSlice := getTestSlice(size)
 
-    for i := 0; i < capacity; i++ {
+    b.ResetTimer()
+    for i := 0; i < b.N; i++ {
+        s := SortedSlice{nums: testSlice}
+
+        s.getMax()
+    }
+}
+
+func benchmarkSortedSliceGetMin(b *testing.B, size int) {
+    testSlice := getTestSlice(size)
+
+    b.ResetTimer()
+    for i := 0; i < b.N; i++ {
+        s := SortedSlice{nums: testSlice}
+
+        s.getMin()
+    }
+}
+
+
+func getTestSlice(size int) []int {
+    slice := make([]int, 0, size)
+
+    for i := 0; i < size; i++ {
         slice = append(slice, i)
     }
 
