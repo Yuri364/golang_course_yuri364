@@ -1,6 +1,7 @@
 package slice
 
 import (
+    "math/rand"
     "reflect"
     "testing"
 )
@@ -119,10 +120,12 @@ func TestGetMin(t *testing.T) {
 func BenchmarkSortedSlice_Insert_copy_hundreds(b *testing.B) { benchmarkSortedSliceInsert(b, 999, 99) }
 func BenchmarkSortedSlice_Insert_copy_thousand(b *testing.B) { benchmarkSortedSliceInsert(b, 9999, 999) }
 func BenchmarkSortedSlice_Insert_copy_hundreds_of_thousands(b *testing.B) { benchmarkSortedSliceInsert(b, 999999, 99999) }
+func BenchmarkSortedSlice_Insert_copy_million(b *testing.B) { benchmarkSortedSliceInsert(b, 1000000, 999999) }
 
 func BenchmarkSortedSlice_Insert_append_hundreds(b *testing.B) { benchmarkSortedSliceInsertV2(b, 999, 99) }
 func BenchmarkSortedSlice_Insert_append_thousand(b *testing.B) { benchmarkSortedSliceInsertV2(b, 9999, 999) }
 func BenchmarkSortedSlice_Insert_append_hundreds_of_thousands(b *testing.B) { benchmarkSortedSliceInsertV2(b, 999999, 99999) }
+func BenchmarkSortedSlice_Insert_append_million(b *testing.B) { benchmarkSortedSliceInsertV2(b, 1000000, 999999) }
 
 func BenchmarkSortedSlice_Delete_hundreds(b *testing.B) { benchmarkSortedSliceDelete(b, 999, 99) }
 func BenchmarkSortedSlice_Delete_thousand(b *testing.B) { benchmarkSortedSliceDelete(b, 9999, 999) }
@@ -191,13 +194,15 @@ func benchmarkSortedSliceGetMin(b *testing.B, size int) {
     }
 }
 
-
+// Preallocate
 func getTestSlice(size int) []int {
     slice := make([]int, 0, size)
 
     for i := 0; i < size; i++ {
         slice = append(slice, i)
     }
+
+    rand.Shuffle(len(slice), func(i, j int) { slice[i], slice[j] = slice[j], slice[i] })
 
     return slice
 }
