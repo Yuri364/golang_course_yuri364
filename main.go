@@ -3,55 +3,13 @@ package main
 import (
     "bufio"
     "fmt"
+    "github.com/Yuri364/golang_course_yuri364/sortedmap/pkg/sortedmap"
     "log"
     "os"
     "regexp"
     "strings"
     "unicode/utf8"
 )
-
-type SortedMap struct {
-    words []string
-    wordCounter map[string]int
-}
-
-func (s *SortedMap) WordCounter(word string)  {
-    if _, ok := s.wordCounter[word]; ok {
-        s.wordCounter[word]++
-    } else {
-        s.wordCounter[word] = 1
-        s.words = append(s.words, word)
-    }
-}
-
-func (s *SortedMap) GetWordStats(count int) map[string]int  {
-    stats := make(map[string]int)
-
-    for i:=0; i < count; i++ {
-        word, max := s.GetMaxWordCount()
-
-        if _, ok := stats[word]; ! ok {
-            stats[word] = max
-            delete(s.wordCounter, word)
-        }
-    }
-
-    return stats
-}
-
-func (s *SortedMap) GetMaxWordCount() (string, int) {
-    var word string
-    var max int
-
-    for v, i := range s.wordCounter {
-        if max < i {
-            max = i
-            word = v
-        }
-    }
-
-    return word, max
-}
 
 const (
     charWordLimit = 3
@@ -67,9 +25,7 @@ func main()  {
 
     reg := regexp.MustCompile("[^a-zA-Z0-9\\s]+")
 
-    sm := SortedMap{
-      wordCounter: make(map[string]int),
-    }
+    sm := sortedmap.New()
 
 	for scanner.Scan() {
 		text := scanner.Text()
@@ -95,7 +51,7 @@ func main()  {
 
     wordStats := sm.GetWordStats(wordCount)
 
-    for _, v := range sm.words {
+    for _, v := range sm.Words {
       if _, ok := wordStats[v]; ok {
           fmt.Printf("Word '%s' was repeated %d times \n", v, wordStats[v])
       }

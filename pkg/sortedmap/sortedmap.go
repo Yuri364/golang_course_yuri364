@@ -1,8 +1,14 @@
 package sortedmap
 
 type SortedMap struct {
-    words []string
+    Words []string
     wordCounter map[string]int
+}
+
+func New() *SortedMap {
+    return &SortedMap{
+        wordCounter: make(map[string]int),
+    }
 }
 
 func (s *SortedMap) WordCounter(word string)  {
@@ -10,7 +16,7 @@ func (s *SortedMap) WordCounter(word string)  {
         s.wordCounter[word]++
     } else {
         s.wordCounter[word] = 1
-        s.words = append(s.words, word)
+        s.Words = append(s.Words, word)
     }
 }
 
