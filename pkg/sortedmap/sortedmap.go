@@ -1,0 +1,44 @@
+package sortedmap
+
+type SortedMap struct {
+    words []string
+    wordCounter map[string]int
+}
+
+func (s *SortedMap) WordCounter(word string)  {
+    if _, ok := s.wordCounter[word]; ok {
+        s.wordCounter[word]++
+    } else {
+        s.wordCounter[word] = 1
+        s.words = append(s.words, word)
+    }
+}
+
+func (s *SortedMap) GetWordStats(count int) map[string]int  {
+    stats := make(map[string]int)
+
+    for i:=0; i < count; i++ {
+        word, max := s.GetMaxWordCount()
+
+        if _, ok := stats[word]; ! ok {
+            stats[word] = max
+            delete(s.wordCounter, word)
+        }
+    }
+
+    return stats
+}
+
+func (s *SortedMap) GetMaxWordCount() (string, int) {
+    var word string
+    var max int
+
+    for v, i := range s.wordCounter {
+        if max < i {
+            max = i
+            word = v
+        }
+    }
+
+    return word, max
+}
