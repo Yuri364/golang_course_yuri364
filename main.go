@@ -23,7 +23,7 @@ func main()  {
 	buf := make([]byte, 0, bufSize)
 	scanner.Buffer(buf, bufSize)
 
-    reg := regexp.MustCompile("[^a-zA-Z0-9\\s]+")
+    reg := regexp.MustCompile(`[^a-zA-Z0-9\\s]+`)
 
     sm := sortedmap.New()
 
