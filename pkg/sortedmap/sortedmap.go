@@ -11,7 +11,7 @@ func New() *SortedMap {
     }
 }
 
-func (s *SortedMap) WordCounter(word string)  {
+func (s *SortedMap) WordCounter(word string) {
     if _, ok := s.wordCounter[word]; ok {
         s.wordCounter[word]++
     } else {
@@ -20,7 +20,7 @@ func (s *SortedMap) WordCounter(word string)  {
     }
 }
 
-func (s *SortedMap) GetWordStats(count int) map[string]int  {
+func (s *SortedMap) GetWordStats(count int) map[string]int {
     stats := make(map[string]int)
 
     for i:=0; i < count; i++ {
