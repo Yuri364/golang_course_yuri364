@@ -23,7 +23,7 @@ func main() {
 	buf := make([]byte, 0, bufSize)
 	scanner.Buffer(buf, bufSize)
 
-	reg := regexp.MustCompile(`[^a-zA-Z0-9\s]+`)
+
 	sm := sortedmap.New()
 
 	for scanner.Scan() {
@@ -33,9 +33,7 @@ func main() {
 			if line == "" {
 				continue
 			}
-
-			processedString := reg.ReplaceAllString(strings.ToLower(line), "")
-			words := strings.Split(processedString, " ")
+            words := splitter(line)
 
 			for i, word := range words {
 				if utf8.RuneCountInString(word) <= charWordLimit || i == 0 || i == len(words)-1 {
@@ -59,4 +57,11 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Printf("%v", err)
 	}
+}
+
+func splitter(line string) []string {
+    reg := regexp.MustCompile(`[^a-zA-Z0-9\s]+`)
+    processedString := reg.ReplaceAllString(strings.ToLower(line), "")
+
+    return strings.Split(processedString, " ")
 }
