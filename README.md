@@ -17,3 +17,18 @@
 - N=10, M=3 для этого текста
 
 [текст]:https://english-e-reader.net/book/gone-with-the-wind-margaret-mitchell
+
+**Текущий результат:**
+
+| Слово    | Кол-во |
+|----------|--------|
+| were     | 92     |
+| that     | 126    |
+| from     | 68     |
+| with     | 128    |
+| scarlett | 149    |
+| about    | 59     |
+| said     | 200    |
+| going    | 51     |
+| melanie  | 64     |
+| went     | 62     |

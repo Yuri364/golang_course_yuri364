@@ -63,16 +63,23 @@ func TestSortedMap_GetWordStats(t *testing.T) {
     }
 }
 
-func BenchmarkSortedMap_GetWordStats_with_1000_words(b *testing.B) {
 
-    words := make([]string, 1000)
+func BenchmarkSortedMap_GetWordStats_with_1000_words(b *testing.B) { benchmarkSortedMapGetWordStats(b, 1000) }
+func BenchmarkSortedMap_GetWordStats_with_10000_words(b *testing.B) { benchmarkSortedMapGetWordStats(b, 10000) }
+func BenchmarkSortedMap_GetWordStats_with_100000_words(b *testing.B) { benchmarkSortedMapGetWordStats(b, 100000) }
+
+
+func benchmarkSortedMapGetWordStats(b *testing.B, n int) {
+
+    words := make([]string, n)
     wordCounter := make(map[string]int)
 
-    for i := 0; i < 1000; i++ {
+    for i := 0; i < n; i++ {
        word := generate(rand.Intn(10))
        words = append(words, word)
        wordCounter[word] = rand.Intn(200)
     }
+    b.ResetTimer()
 
     sm := &SortedMap{Words: words, wordCounter: wordCounter}
 
