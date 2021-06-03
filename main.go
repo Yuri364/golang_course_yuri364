@@ -6,17 +6,12 @@ import (
 	"github.com/Yuri364/golang_course_yuri364/sortedmap/pkg/sortedmap"
 	"log"
 	"os"
-	"regexp"
-	"strings"
-	"unicode/utf8"
 )
 
 const (
-	charWordLimit = 3
+	wordLengthLimit = 3
 	wordCount     = 10
 )
-
-var reg = regexp.MustCompile(`[^a-zA-Z0-9\s]+`)
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
@@ -30,30 +25,7 @@ func main() {
 	for scanner.Scan() {
 		text := scanner.Text()
 
-		for _, line := range strings.Split(text, ". ") {
-			if line == "" {
-				continue
-			}
-			processedString := reg.ReplaceAllString(strings.ToLower(line), "")
-			words := strings.Split(processedString, " ")
-
-			for i, word := range words {
-				word = strings.ReplaceAll(word, "\t", "")
-
-				if utf8.RuneCountInString(word) <= charWordLimit {
-					continue
-				}
-
-				if i == 0 || i == len(words)-1 {
-					sm.AddToStopLIst(word)
-
-					continue
-				}
-
-				sm.WordCounter(word)
-			}
-
-		}
+		sm.SplitTextIntoWords(text, wordLengthLimit)
 	}
 
 	wordStats := sm.GetWordStats(wordCount)

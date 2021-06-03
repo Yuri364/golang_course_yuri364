@@ -70,7 +70,6 @@ func BenchmarkSortedMap_GetWordStats_with_100000_words(b *testing.B) { benchmark
 
 
 func benchmarkSortedMapGetWordStats(b *testing.B, n int) {
-
     words := make([]string, n)
     wordCounter := make(map[string]int)
 

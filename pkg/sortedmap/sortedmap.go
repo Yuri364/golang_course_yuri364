@@ -13,18 +13,18 @@ func New() *SortedMap {
     }
 }
 
+func (s *SortedMap) AddToStopLIst(word string) {
+    if _, ok := s.stopList[word]; ! ok {
+        s.stopList[word] = struct{}{}
+    }
+}
+
 func (s *SortedMap) WordCounter(word string) {
     if _, ok := s.wordCounter[word]; ok {
         s.wordCounter[word]++
     } else {
         s.wordCounter[word] = 1
         s.Words = append(s.Words, word)
-    }
-}
-
-func (s *SortedMap) AddToStopLIst(word string) {
-    if _, ok := s.stopList[word]; ! ok {
-        s.stopList[word] = struct{}{}
     }
 }
 
