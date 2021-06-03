@@ -18,17 +18,17 @@
 
 [текст]:https://english-e-reader.net/book/gone-with-the-wind-margaret-mitchell
 
-**Текущий результат:**
+**Результат:**
 
-| Слово    | Кол-во |
-|----------|--------|
-| were     | 92     |
-| that     | 126    |
-| from     | 68     |
-| with     | 128    |
-| scarlett | 149    |
-| about    | 59     |
-| said     | 200    |
-| going    | 51     |
-| melanie  | 64     |
-| went     | 62     |
+| #  | Слово  | Кол-во |
+|----|--------|--------|
+| 1  | like   | 35     |
+| 2  | told   | 29     |
+| 3  | looked | 39     |
+| 4  | marry  | 21     |
+| 5  | went   | 62     |
+| 6  | love   | 32     |
+| 7  | want   | 29     |
+| 8  | into   | 29     |
+| 8  | took   | 20     |
+| 10 | cant   | 18     |

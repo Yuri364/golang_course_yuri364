@@ -3,11 +3,13 @@ package sortedmap
 type SortedMap struct {
     Words []string
     wordCounter map[string]int
+    stopList map[string]struct{}
 }
 
 func New() *SortedMap {
     return &SortedMap{
         wordCounter: make(map[string]int),
+        stopList: make(map[string]struct{}),
     }
 }
 
@@ -17,6 +19,12 @@ func (s *SortedMap) WordCounter(word string) {
     } else {
         s.wordCounter[word] = 1
         s.Words = append(s.Words, word)
+    }
+}
+
+func (s *SortedMap) AddToStopLIst(word string) {
+    if _, ok := s.stopList[word]; ! ok {
+        s.stopList[word] = struct{}{}
     }
 }
 
@@ -40,7 +48,7 @@ func (s *SortedMap) GetMaxWordCount() (string, int) {
     var max int
 
     for v, i := range s.wordCounter {
-        if max < i {
+        if _, ok := s.stopList[v]; ! ok && max < i {
             max = i
             word = v
         }
