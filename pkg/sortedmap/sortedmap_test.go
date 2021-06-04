@@ -1,7 +1,9 @@
 package sortedmap
 
 import (
+    "bufio"
     "math/rand"
+    "os"
     "reflect"
     "testing"
     "unsafe"
@@ -64,10 +66,56 @@ func TestSortedMap_GetWordStats(t *testing.T) {
 }
 
 
+func TestSortedMap_GetWordStatsFromFile(t *testing.T) {
+    expected := map[string]int {
+        "like":35, "told":29, "looked":39, "marry":21, "went":62, "love":32, "want":29, "into":29, "took":20, "cant":18,
+    }
+
+    f, _ := os.Open("testdata/text.txt")
+    defer f.Close()
+
+    sm := New()
+    scanner := bufio.NewScanner(f)
+    for scanner.Scan() {
+        text := scanner.Text()
+
+        sm.SplitTextIntoWords(text, 3)
+    }
+    wordStats := sm.GetWordStats(10)
+
+    if !reflect.DeepEqual(wordStats, expected) {
+        t.Fatalf("failed to confirm that the maps are equal (expected: %v, result: %v)", wordStats, expected)
+    }
+}
+
+func BenchmarkSortedMap_GetWordStats_from_file(b *testing.B) { benchmarkSortedMapGetWordStatsFromFIle(b, 10) }
 func BenchmarkSortedMap_GetWordStats_with_1000_words(b *testing.B) { benchmarkSortedMapGetWordStats(b, 1000) }
 func BenchmarkSortedMap_GetWordStats_with_10000_words(b *testing.B) { benchmarkSortedMapGetWordStats(b, 10000) }
 func BenchmarkSortedMap_GetWordStats_with_100000_words(b *testing.B) { benchmarkSortedMapGetWordStats(b, 100000) }
 
+
+var Result map[string]int
+func benchmarkSortedMapGetWordStatsFromFIle(b *testing.B, n int) {
+
+    f, _ := os.Open("testdata/text.txt")
+    defer f.Close()
+
+    sm := New()
+    scanner := bufio.NewScanner(f)
+    for scanner.Scan() {
+        text := scanner.Text()
+
+        sm.SplitTextIntoWords(text, 3)
+    }
+    b.ResetTimer()
+
+    var r map[string]int
+    for i := 0; i < b.N; i++ {
+        r = sm.GetWordStats(10)
+    }
+
+    Result = r
+}
 
 func benchmarkSortedMapGetWordStats(b *testing.B, n int) {
     words := make([]string, n)
@@ -82,12 +130,13 @@ func benchmarkSortedMapGetWordStats(b *testing.B, n int) {
 
     sm := &SortedMap{Words: words, wordCounter: wordCounter}
 
+    var r map[string]int
     for i := 0; i < b.N; i++ {
-       _ = sm.GetWordStats(10)
+       r = sm.GetWordStats(10)
     }
+
+    Result = r
 }
-
-
 
 func generate(size int) string {
     var chars = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
