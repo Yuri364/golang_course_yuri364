@@ -1,9 +1,9 @@
 package main
 
 import (
+	"./pkg/sortedmap"
 	"bufio"
 	"fmt"
-	"github.com/Yuri364/golang_course_yuri364/sortedmap/pkg/sortedmap"
 	"log"
 	"os"
 )
