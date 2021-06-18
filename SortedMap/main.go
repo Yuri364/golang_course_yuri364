@@ -6,6 +6,7 @@ import (
     "fmt"
     "log"
     "os"
+    "sort"
     "sortedmap/pkg/sortedmap"
 )
 
@@ -29,20 +30,21 @@ func main() {
 	sm := sortedmap.New()
 
 	for scanner.Scan() {
-        jsonString := scanner.Text()
+        jsonString := scanner.Bytes()
 
         var target []jsonStruct
 
-        err := json.Unmarshal([]byte(jsonString), &target)
+        err := json.Unmarshal(jsonString, &target)
         if err != nil {
             fmt.Println(err)
             return
         }
 
-        var text string
+        m := make(map[int]string)
         for _, t := range target {
-            text += t.Text
+            m[t.Number] = t.Text
         }
+        text := sortedMapIntString(m)
 
 		sm.SplitTextIntoWords(text, wordLengthLimit)
 	}
@@ -58,4 +60,19 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Printf("%v", err)
 	}
+}
+
+func sortedMapIntString(m map[int]string) string {
+    var text string
+    var keys []int
+    for k, _ := range m {
+        keys = append(keys, k)
+    }
+    sort.Ints(keys)
+
+    for _, k := range keys {
+        text += m[k]
+    }
+
+    return text
 }
