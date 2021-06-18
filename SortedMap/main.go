@@ -1,17 +1,24 @@
 package main
 
 import (
-	"./pkg/sortedmap"
-	"bufio"
-	"fmt"
-	"log"
-	"os"
+    "bufio"
+    "encoding/json"
+    "fmt"
+    "log"
+    "os"
+    "sort"
+    "sortedmap/pkg/sortedmap"
 )
 
 const (
 	wordLengthLimit = 3
 	wordCount     = 10
 )
+
+type jsonStruct struct {
+    Number int
+    Text string
+}
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
@@ -23,7 +30,21 @@ func main() {
 	sm := sortedmap.New()
 
 	for scanner.Scan() {
-		text := scanner.Text()
+        jsonString := scanner.Bytes()
+
+        var target []jsonStruct
+
+        err := json.Unmarshal(jsonString, &target)
+        if err != nil {
+            fmt.Println(err)
+            return
+        }
+
+        m := make(map[int]string)
+        for _, t := range target {
+            m[t.Number] = t.Text
+        }
+        text := sortedMapIntString(m)
 
 		sm.SplitTextIntoWords(text, wordLengthLimit)
 	}
@@ -39,4 +60,19 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Printf("%v", err)
 	}
+}
+
+func sortedMapIntString(m map[int]string) string {
+    var text string
+    var keys []int
+    for k, _ := range m {
+        keys = append(keys, k)
+    }
+    sort.Ints(keys)
+
+    for _, k := range keys {
+        text += m[k]
+    }
+
+    return text
 }
